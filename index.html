@@ -223,7 +223,7 @@
 
         function displayWishes() {
             wishesElement.style.display = 'block';
-            const message = "Wishing you long life and prosperity.\nMay this special day bring you closer to your dreams and fill your heart with joy.\nMore success.\nMore funds.\nMore wisdom ";
+            const message = "Wishing you long life and prosperity.\nMay this special day bring you closer to your dreams and fill your heart with joy.\nMore success\nMore funds\nMore wisdom ";
             let index = 0;
             wishesElement.innerHTML = '';
 
@@ -239,7 +239,7 @@
                             wishesElement.style.display = 'none';
                             displayFinalMessage();
                         }, 2000);
-                    }, 5000);
+                    }, 4000);
                 }
             }
             typeWriter();
@@ -276,6 +276,7 @@
             document.querySelectorAll('.balloon').forEach(balloon => {
                 balloon.style.opacity = 0;
                 setTimeout(() => balloon.remove(), 1000); // Remove after fade out
+                window.close();
             });
         }
     </script>
