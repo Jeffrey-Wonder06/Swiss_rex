@@ -238,8 +238,8 @@
                         setTimeout(() => {
                             wishesElement.style.display = 'none';
                             displayFinalMessage();
-                        }, 2000);
-                    }, 4000);
+                        }, 1000);
+                    }, 3000);
                 }
             }
             typeWriter();
@@ -277,8 +277,12 @@
                 balloon.style.opacity = 0;
                 setTimeout(() => balloon.remove(), 1000); // Remove after fade out
             });
-            window.close();
         }
+        
+        setTimeout(function() {
+            window.close();
+        }, 7000);
+        
     </script>
 </body>
 </html>
