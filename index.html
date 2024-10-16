@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Animation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #001f3f; /* Navy blue background */
+            overflow: hidden;
+        }
+        #countdown {
+            font-size: 72px;
+            margin-top: 20%;
+            color: #FFD700; /* Gold color */
+        }
+        #happy-birthday {
+            display: none;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-size: 84px; /* Increased font size */
+            font-weight: bold;
+            margin-top: 10%;
+            color: #FFD700; /* Gold color */
+            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5); /* Shadow effect */
+            animation: colorChange 2s infinite; /* Color change animation */
+        }
+        @keyframes colorChange {
+            0% { color: #FFD700; } /* Gold */
+            25% { color: #FF69B4; } /* Hot Pink */
+            50% { color: #00BFFF; } /* Deep Sky Blue */
+            75% { color: #32CD32; } /* Lime Green */
+            100% { color: #FFD700; } /* Gold */
+        }
+        #fireworks, #glitters {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+        .balloon {
+            position: absolute;
+            bottom: -150px;
+            width: 60px;
+            height: 80px;
+            background: radial-gradient(circle at 50% 60%, #FF69B4, #FF1493);
+            border-radius: 60% 60% 50% 50%;
+            opacity: 1;
+            animation: float 10s ease-in-out forwards;
+        }
+        .balloon::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 80px;
+            background: linear-gradient(to bottom, #000, #555); /* Spaghetti-like appearance */
+            bottom: -80px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-15deg);
+            border-radius: 10px;
+        }
+        .balloon:nth-child(1) {
+            left: 20%;
+            animation-delay: 0s;
+        }
+        .balloon:nth-child(2) {
+            left: 50%;
+            animation-delay: 2s;
+        }
+        .balloon:nth-child(3) {
+            left: 80%;
+            animation-delay: 4s;
+        }
+        @keyframes float {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-120vh); }
+        }
+        #cake {
+            display: none;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            background: url('cake.png') no-repeat center center / contain;
+        }
+        #gift {
+            display: none;
+            width: 200px;
+            height: 200px;
+            margin: 20px auto 0;
+            background: url('gift.png') no-repeat center center / contain;
+        }
+        #glitters {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+        #wishes {
+            display: none;
+            font-size: 36px;
+            font-family: 'Brush Script MT', cursive;
+            font-weight: bold;
+            color: #FF1493;
+            margin-top: 20px;
+            font-style: italic; /* Italic text */
+            white-space: pre-wrap; /* Preserve whitespace for animation */
+            line-height: 1.5; /* Add space between lines */
+            text-align: center; /* Center align text */
+        }
+        @keyframes vanish {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        #final-message {
+            display: none;
+            position: relative;
+            height: 100vh; /* Full viewport height */
+            overflow: hidden;
+        }
+        #final-message .word {
+            display: block;
+            font-size: 72px;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            color: #FFD700; /* Gold color */
+            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5); /* Shadow effect */
+            animation: slideIn 2s ease-in-out forwards; /* Slide-in effect */
+        }
+        #final-message .word:nth-child(1) { color: #FF69B4; } /* Hot Pink */
+        #final-message .word:nth-child(2) { color: #00BFFF; } /* Deep Sky Blue */
+        #final-message .word:nth-child(3) { color: #32CD32; } /* Lime Green */
+        #final-message .word:nth-child(4) { color: #FFD700; } /* Gold */
+        @keyframes slideIn {
+            from { transform: translateY(100vh); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="fireworks"></canvas>
+    <div id="cake"></div>
+    <div id="gift"></div>
+    <div id="glitters"></div>
+    <div id="countdown">3</div>
+    <div id="happy-birthday">HAPPY BIRTHDAY JAPHETH</div>
+    <div id="wishes"></div>
+    <div id="final-message">
+        <div class="word">Happy</div>
+        <div class="word">Birthday</div>
+        <div class="word">once</div>
+        <div class="word">more</div>
+        <div class="word">Japheth!</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+    <script>
+        const countdownElement = document.getElementById('countdown');
+        const happyBirthdayElement = document.getElementById('happy-birthday');
+        const fireworksCanvas = document.getElementById('fireworks');
+        const cakeElement = document.getElementById('cake');
+        const giftElement = document.getElementById('gift');
+        const glittersCanvas = document.getElementById('glitters');
+        const wishesElement = document.getElementById('wishes');
+        const finalMessageElement = document.getElementById('final-message');
+
+        let secondsRemaining = 3;
+
+        function updateCountdown() {
+            countdownElement.textContent = secondsRemaining;
+
+            if (secondsRemaining > 0) {
+                secondsRemaining--;
+                playSound('tick.mp3'); // Play tick sound
+            } else {
+                clearInterval(countdownInterval);
+                countdownElement.style.display = 'none';
+                happyBirthdayElement.style.display = 'block';
+                triggerFireworks();
+                createBalloons();
+                setTimeout(() => {
+                    happyBirthdayElement.style.opacity = 0;
+                    hideBalloons();
+                    setTimeout(() => {
+                        happyBirthdayElement.style.display = 'none';
+                        displayWishes();
+                    }, 1000); // Wait for fade out effect
+                }, 3000); // Display for 3 seconds
+            }
+        }
+
+        const countdownInterval = setInterval(updateCountdown, 1000);
+
+        function triggerFireworks() {
+            fireworksCanvas.style.display = 'block';
+            glittersCanvas.style.display = 'block';
+            const duration = 5 * 1000; // 5 seconds
+            const end = Date.now() + duration;
+
+            const interval = setInterval(() => {
+                if (Date.now() > end) {
+                    clearInterval(interval);
+                    return;
+                }
+
+                confetti({
+                    particleCount: 100,
+                    startVelocity: 30,
+                    spread: 360,
+                    colors: ['#FFD700', '#FFEC8B', '#FFFFFF', '#FF69B4'],
+                    origin: { y: Math.random() * 0.6 }
+                });
+                playSound('boom.mp3'); // Play boom sound
+            }, 250);
+        }
+
+        function displayWishes() {
+            wishesElement.style.display = 'block';
+            const message = "Wishing you long life and prosperity.\nMay this special day bring you closer to your dreams and fill your heart with joy.\nMore success.\nMore funds.\nMore wisdom ";
+            let index = 0;
+            wishesElement.innerHTML = '';
+
+            function typeWriter() {
+                if (index < message.length) {
+                    wishesElement.innerHTML += message.charAt(index);
+                    index++;
+                    setTimeout(typeWriter, 50);
+                } else {
+                    setTimeout(() => {
+                        wishesElement.style.opacity = 0;
+                        setTimeout(() => {
+                            wishesElement.style.display = 'none';
+                            displayFinalMessage();
+                        }, 2000);
+                    }, 5000);
+                }
+            }
+            typeWriter();
+        }
+
+        function displayFinalMessage() {
+            finalMessageElement.style.display = 'block';
+
+            setTimeout(() => {
+                finalMessageElement.style.opacity = 1;
+                setTimeout(() => {
+                    finalMessageElement.style.animation = 'vanish 2s forwards';
+                    setTimeout(() => {
+                        finalMessageElement.style.display = 'none';
+                    }, 1000); // Wait for vanish effect
+                }, 4000); // Display final message for 4 seconds
+            }, 1000); // Initial delay
+        }
+
+        function playSound(src) {
+            const audio = new Audio(src);
+            audio.play();
+        }
+
+        function createBalloons() {
+            for (let i = 0; i < 5; i++) {
+                const balloon = document.createElement('div');
+                balloon.classList.add('balloon');
+                document.body.appendChild(balloon);
+            }
+        }
+
+        function hideBalloons() {
+            document.querySelectorAll('.balloon').forEach(balloon => {
+                balloon.style.opacity = 0;
+                setTimeout(() => balloon.remove(), 1000); // Remove after fade out
+            });
+        }
+    </script>
+</body>
+</html>
